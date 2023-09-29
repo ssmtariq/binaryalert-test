@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "binaryalert_log_bucket" {
     replace(var.name_prefix, "_", "."),
     var.aws_region,
   )
-  acl = "log-delivery-write"
+  //acl = "log-delivery-write"
 
   // Everything in the log bucket rotates to infrequent access and expires.
   lifecycle_rule {

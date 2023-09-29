@@ -29,6 +29,12 @@ def _upload_test_files_to_s3(bucket_name: str) -> Dict[str, str]:
 
         print('Uploading {} to {}...'.format(filename, s3_full_identifier))
         bucket.upload_file(filepath, s3_object_key, ExtraArgs={'Metadata': {'filepath': filename}})
+        # Check if the uploaded object exists in the bucket
+        try:
+            bucket.Object(s3_object_key).load()
+            print('File {} uploaded successfully to {}.'.format(filename, s3_full_identifier))
+        except Exception as e:
+            print('Error uploading {}: {}'.format(filename, str(e)))
 
     return result
 
@@ -59,7 +65,14 @@ def _query_dynamo_for_test_files(
     """
     client = boto3.client('dynamodb')
 
+    print("DynamoDB table name: ", table_name)
     results = {}  # Map filename to list of matched rules.
+    # Check if the DynamoDB table is empty
+    table_description = client.describe_table(TableName=table_name)
+    if table_description['Table']['ItemCount'] == 0:
+        print(f"DynamoDB table '{table_name}' is empty.")
+        return results
+    
     for attempt in range(1, max_attempts + 1):
         if attempt > 1:
             time.sleep(5)
@@ -79,6 +92,7 @@ def _query_dynamo_for_test_files(
                 }
             }
         )['Responses'][table_name]
+        print("Response from DynamoDB: ", response)
 
         for match in response:
             results[match['S3Metadata']['M']['filepath']['S']] = match['MatchedRules']['SS']
@@ -136,8 +150,11 @@ def run(bucket_name: str, analyzer_function_name: str, table_name: str) -> bool:
         True if the test was successful, False otherwise.
     """
     test_file_info = _upload_test_files_to_s3(bucket_name)
+    print("Test File: ", test_file_info)
     analyzer_version = _lambda_production_version(analyzer_function_name)
+    print("Analyzer Version: ", analyzer_version)
     results = _query_dynamo_for_test_files(table_name, test_file_info, analyzer_version)
+    print("Results from dynamoDB query: ", results)
 
     expected = {
         'eicar.txt': [
