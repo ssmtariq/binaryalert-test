@@ -50,11 +50,12 @@ Ubuntu `sudo apt-get install libssl-dev`<br>
 Amazon Linux `sudo yum install openssl-devel`
 
 ### Clone the latest python3.8 release of BinaryAlert:
-`git clone --branch migrate_to_python3.8 https://github.com/airbnb/binaryalert-test`
+`git clone --branch migrate_to_python3.8 https://github.com/ssmtariq/binaryalert-test.git`
 
 ### Create and activate a virtual environment
 ```
 cd binaryalert
+sudo apt-get install python3.8-venv
 python3.8 -m venv venv
 source venv/bin/activate
 ```
