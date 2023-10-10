@@ -54,7 +54,7 @@ Amazon Linux `sudo yum install openssl-devel`
 
 ### Create and activate a virtual environment
 ```
-cd binaryalert
+cd binaryalert-test
 sudo apt-get install python3.8-venv
 python3.8 -m venv venv
 source venv/bin/activate
