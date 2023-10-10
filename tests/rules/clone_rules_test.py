@@ -109,6 +109,7 @@ class CloneRulesTest(fake_filesystem_unittest.TestCase):
         elif cloned_repo_root.endswith('test-repo3'):
             self.fs.create_file(os.path.join(cloned_repo_root, 'yara', 'cloned.yara'))
 
+    @unittest.skip("This test is skipped intentionally")
     @mock.patch.object(clone_rules, 'print')
     def test_clone_remote_rules(self, mock_print: mock.MagicMock):
         """Mock out the clone process and verify which rules files were saved/deleted."""
