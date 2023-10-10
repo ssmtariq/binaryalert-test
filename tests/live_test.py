@@ -71,7 +71,6 @@ def _query_dynamo_for_test_files(
     table_description = client.describe_table(TableName=table_name)
     if table_description['Table']['ItemCount'] == 0:
         print(f"DynamoDB table '{table_name}' is empty.")
-        return results
     
     for attempt in range(1, max_attempts + 1):
         if attempt > 1:
