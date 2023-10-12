@@ -26,8 +26,8 @@ and install the dependencies as follows:
     # Install requirements
     sudo yum update
     sudo yum install autoconf automake bzip2-devel gcc64 gcc64-c++ libarchive-devel libffi-devel \
-        libtool libuuid-devel openssl-devel pcre-devel poppler-utils python36 python36-devel zlib-devel
-    sudo pip install nose
+        libtool libuuid-devel openssl-devel pcre-devel poppler-utils python38 python38-devel zlib-devel
+    sudo pip3.8 install nose
 
     # Compile YARA
     wget https://github.com/VirusTotal/yara/archive/v3.8.0.tar.gz
@@ -42,7 +42,7 @@ and install the dependencies as follows:
     # Install cryptography and yara-python
     cd ~
     mkdir pip
-    pip-3.6 install cryptography yara-python -t pip
+    pip3.8 install cryptography==2.3 yara-python==3.8.0 -t pip
 
     # Compile yextend
     wget https://github.com/BayshoreNetworks/yextend/archive/1.6.tar.gz
@@ -56,7 +56,7 @@ and install the dependencies as follows:
     cd ~/pip
     rm -r *.dist-info *.egg-info
     find . -name __pycache__ | xargs rm -r
-    mv _cffi_backend.cpython-36m-x86_64-linux-gnu.so _cffi_backend.so
+    mv _cffi_backend.cpython-38-x86_64-linux-gnu.so _cffi_backend.so
     cd cryptography/hazmat/bindings
     mv _constant_time.abi3.so _constant_time.so
     mv _openssl.abi3.so _openssl.so
@@ -65,9 +65,9 @@ and install the dependencies as follows:
     # Gather pip files
     cd ~
     mkdir lambda
-    cp pip/.libs_cffi_backend/* lambda
+    cp pip/.libs_cffi_backend/* lambda #You May not find the dir
     cp -r pip/* lambda
-    mv lambda/yara.cpython-36m-x86_64-linux-gnu.so lambda/yara.so
+    mv lambda/yara.cpython-38-x86_64-linux-gnu.so lambda/yara.so
     wget https://raw.githubusercontent.com/VirusTotal/yara/master/COPYING -O lambda/YARA_LICENSE
     wget https://raw.githubusercontent.com/VirusTotal/yara-python/master/LICENSE -O lambda/YARA_PYTHON_LICENSE
 
@@ -94,9 +94,10 @@ and install the dependencies as follows:
     cp /usr/lib64/liblcms2.so.2 lambda
     cp /usr/lib64/liblzma.so.5 lambda
     cp /usr/lib64/liblzo2.so.2 lambda
-    cp /usr/lib64/libopenjpeg.so.2 lambda
+    cp /usr/lib64/libopenjpeg.so.1 lambda
+    cp /usr/lib64/libopenjpeg.so.2 lambda #If not generated copy from the file "dependencies.zip.3.6"
     cp /usr/lib64/libpcrecpp.so.0 lambda
-    cp /usr/lib64/libpng12.so.0 lambda
+    cp /usr/lib64/libpng12.so.0 lambda #If not generated copy from the file "dependencies.zip.3.6"
     cp /usr/lib64/libpoppler.so.46 lambda
     cp /usr/lib64/libstdc++.so.6 lambda
     cp /usr/lib64/libtiff.so.5 lambda
